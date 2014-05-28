@@ -9,6 +9,22 @@
         <script src="/static/js/underscore-min.js"></script>
         <script src="/static/js/bootstrap.min.js"></script>
         <script>
+        function get_data() {
+            $.get('/data', function(res) {
+                alert(res);
+            });
+        };
+
+        function save_data(data) {
+            $.ajax({
+                type: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify(data),
+                dataType: 'json',
+                url: '/data',
+            });
+        }
+
         $(document).ready(function() {
             var CHANNELS = 8;
             var SUB_CHANNELS = 8;
