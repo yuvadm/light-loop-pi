@@ -16,6 +16,16 @@
         };
 
         function save_data(data) {
+
+            $('.light-channel').each(function(_, channel) {
+                channel = $(channel);
+                channel.find('.light-row').each(function(_, row) {
+                    var vals = $(row).find('.light-cell-btn').map(function(x) { return $(x).hasClass('active') ? 1 : 0; });
+                    console.log(_.values(vals));
+                });
+                console.log(channel.attr('data-light-channel'));
+            });
+
             $.ajax({
                 type: 'POST',
                 contentType: 'application/json',
@@ -41,13 +51,22 @@
                 $('.light-channel').hide();
                 $('.light-channel[data-light-channel=' + chan +']').show();
             });
+
+            $('#save-btn').click(function(){
+                save_data();
+            });
         });
         </script>
     </head>
     <body>
         <div class="container">
             <h1>Light Loop Pi</h1>
-            <div id="channel-btns" class="btn-group"></div>
+            <div class="btn-toolbar" role="toolbar">
+                <div id="channel-btns" class="btn-group"></div>
+                <div class="btn-group">
+                    <button id="save-btn" type="button" class="btn btn-primary">Save</button>
+                </div>
+            </div>
 
             <div id="light-container"></div>
         </div>
