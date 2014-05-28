@@ -33,6 +33,13 @@
             _.each(_.range(CHANNELS), function(i) {
                 var row = $(_.template($('#light-row-template').text(), {i: i, subchannels: SUB_CHANNELS, cells: LOOP_LENGTH}));
                 $('#light-container').append(row);
+                $('#channel-btns').append($('<button type="button" class="btn btn-default channel-btn" data-channel="' + i + '">Channel ' + i + '</button>'));
+            });
+
+            $('.channel-btn').click(function() {
+                var chan = $(this).attr('data-channel');
+                $('.light-channel').hide();
+                $('.light-channel[data-light-channel=' + chan +']').show();
             });
         });
         </script>
@@ -40,8 +47,11 @@
     <body>
         <div class="container">
             <h1>Light Loop Pi</h1>
+            <div id="channel-btns" class="btn-group"></div>
+
             <div id="light-container"></div>
         </div>
+
         <script type="text/template" class="template" id="light-row-template">
             <div class="light-channel" data-light-channel="<%= i %>">
                 <h3>Channel <%= i %></h3>

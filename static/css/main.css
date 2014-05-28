@@ -1,6 +1,7 @@
-.light-channel:nth-child(2n) {
-    background-color: #ccc;
+.light-channel {
+    display: none;
 }
+
 .light-cell-btn {
     margin: 2px;
 }
