@@ -1,0 +1,7 @@
+.light-cell-btn {
+    margin: 2px;
+}
+
+.light-cell-btn.active {
+    background-color: #0F340D;
+}
