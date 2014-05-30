@@ -23,7 +23,7 @@
 
         function save_data(data) {
             var data = {
-                tempo: 500,
+                tempo: +$('#speed-slider').val(),
                 trees: []
             };
 
@@ -91,7 +91,7 @@
 
             <div class="speed-slider">
                 <label>Loop speed:</label>
-                <input id="speed-slider" data-slider-id='ex1Slider' type="text" data-slider-min="500" data-slider-max="5000" data-slider-step="100" data-slider-value="1000"/>
+                <input id="speed-slider" data-slider-id='ex1Slider' type="text" data-slider-min="500" data-slider-max="5000" data-slider-step="100"/>
             </div>
 
             <div class="btn-toolbar" role="toolbar">
