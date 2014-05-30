@@ -36,20 +36,20 @@
         }
 
         $(document).ready(function() {
+            var TREES = 8;
             var CHANNELS = 8;
-            var SUB_CHANNELS = 8;
-            var LOOP_LENGTH = 24;
+            var CELLS = 24;
 
             _.each(_.range(CHANNELS), function(i) {
-                var row = $(_.template($('#light-row-template').text(), {i: i, subchannels: SUB_CHANNELS, cells: LOOP_LENGTH}));
+                var row = $(_.template($('#light-row-template').text(), {i: i, channels: CHANNELS, cells: CELLS}));
                 $('#light-container').append(row);
-                $('#channel-btns').append($('<button type="button" class="btn btn-default channel-btn" data-channel="' + i + '">Channel ' + i + '</button>'));
+                $('#tree-btns').append($('<button type="button" class="btn btn-default tree-btn" data-tree="' + i + '">Tree ' + i + '</button>'));
             });
 
-            $('.channel-btn').click(function() {
-                var chan = $(this).attr('data-channel');
-                $('.light-channel').hide();
-                $('.light-channel[data-light-channel=' + chan +']').show();
+            $('.tree-btn').click(function() {
+                var tree = $(this).attr('data-tree');
+                $('.light-tree').hide();
+                $('.light-tree[data-light-tree=' + tree +']').show();
             });
 
             $('#save-btn').click(function(){
@@ -62,7 +62,7 @@
         <div class="container">
             <h1>Light Loop Pi</h1>
             <div class="btn-toolbar" role="toolbar">
-                <div id="channel-btns" class="btn-group"></div>
+                <div id="tree-btns" class="btn-group"></div>
                 <div class="btn-group">
                     <button id="save-btn" type="button" class="btn btn-primary">Save</button>
                 </div>
@@ -72,11 +72,11 @@
         </div>
 
         <script type="text/template" class="template" id="light-row-template">
-            <div class="light-channel" data-light-channel="<%= i %>">
-                <h3>Channel <%= i %></h3>
-                <% _.each(_.range(subchannels), function(j) { %>
+            <div class="light-tree" data-light-tree="<%= i %>">
+                <h3>Tree <%= i %></h3>
+                <% _.each(_.range(channels), function(j) { %>
                     <div class="light-row" data-light-row="<%= j %>">
-                        <span>Subchan <%= j %></span>
+                        <span>Channel <%= j %></span>
                         <% _.each(_.range(cells), function(k) { %>
                             <button type="button" class="btn btn-success light-cell-btn" data-toggle="button" data-light-cell="<%= k %>">&nbsp;</button>
                         <% }); %>
