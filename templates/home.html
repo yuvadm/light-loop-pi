@@ -19,14 +19,25 @@
 
         function save_data(data) {
 
-            $('.light-channel').each(function(_, channel) {
-                channel = $(channel);
-                channel.find('.light-row').each(function(_, row) {
-                    var vals = $(row).find('.light-cell-btn').map(function(x) { return $(x).hasClass('active') ? 1 : 0; });
-                    console.log(_.values(vals));
+            var data = {
+                tempo: 500,
+                trees: []
+            };
+
+            $('.light-tree').each(function(_idx, tree) {
+                tree = $(tree);
+                var tree_data = []
+                tree.find('.light-row').each(function(_idx, row) {
+                    var vals = $(row).find('.light-cell-btn').toArray().map(function(x) {
+                        return x.className.contains('active') ? 1 : 0;
+                    });
+                    tree_data.push(vals);
                 });
-                console.log(channel.attr('data-light-channel'));
+                data.trees.push(tree_data);
+                // console.log(tree.attr('data-light-tree'));
             });
+
+            console.log(data);
 
             $.ajax({
                 type: 'POST',
