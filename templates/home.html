@@ -57,10 +57,8 @@
                 $('#tree-btns').append($('<button type="button" class="btn btn-default tree-btn" data-tree="' + i + '">Tree ' + i + '</button>'));
             });
 
-            $('#ex1').slider({
-                formater: function(value) {
-                    return 'Current value: ' + value;
-                }
+            $('#speed-slider').slider({
+                tooltip: 'always'
             });
 
             $('.tree-btn').click(function() {
@@ -93,7 +91,7 @@
 
             <div class="speed-slider">
                 <label>Loop speed:</label>
-                <input id="ex1" data-slider-id='ex1Slider' type="text" data-slider-min="500" data-slider-max="5000" data-slider-step="100" data-slider-value="1000"/>
+                <input id="speed-slider" data-slider-id='ex1Slider' type="text" data-slider-min="500" data-slider-max="5000" data-slider-step="100" data-slider-value="1000"/>
             </div>
 
             <div class="btn-toolbar" role="toolbar">
