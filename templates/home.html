@@ -4,10 +4,12 @@
         <title>Light Loop Pi</title>
         <link rel="stylesheet" href="/static/css/bootstrap.min.css">
         <link rel="stylesheet" href="/static/css/bootstrap-theme.min.css">
+        <link rel="stylesheet" href="/static/css/bootstrap-slider.css"/>
         <link rel="stylesheet" href="/static/css/main.css"/>
         <script src="/static/js/jquery-2.1.1.min.js"></script>
         <script src="/static/js/underscore-min.js"></script>
         <script src="/static/js/bootstrap.min.js"></script>
+        <script src="/static/js/bootstrap-slider.min.js"></script>
         <script>
         function get_data() {
             $.get('/data', function(res) {
@@ -46,6 +48,12 @@
                 $('#tree-btns').append($('<button type="button" class="btn btn-default tree-btn" data-tree="' + i + '">Tree ' + i + '</button>'));
             });
 
+            $('#ex1').slider({
+                formater: function(value) {
+                    return 'Current value: ' + value;
+                }
+            });
+
             $('.tree-btn').click(function() {
                 var tree = $(this).attr('data-tree');
                 $('.light-tree').hide();
@@ -61,6 +69,12 @@
     <body>
         <div class="container">
             <h1>Light Loop Pi</h1>
+
+            <div class="speed-slider">
+                <label>Loop speed:</label>
+                <input id="ex1" data-slider-id='ex1Slider' type="text" data-slider-min="500" data-slider-max="5000" data-slider-step="100" data-slider-value="1000"/>
+            </div>
+
             <div class="btn-toolbar" role="toolbar">
                 <div id="tree-btns" class="btn-group"></div>
                 <div class="btn-group">
