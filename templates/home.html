@@ -11,9 +11,9 @@
         <script src="/static/js/bootstrap.min.js"></script>
         <script src="/static/js/bootstrap-slider.min.js"></script>
         <script>
-        function get_data() {
+        function load_data() {
             $.get('/data', function(res) {
-                alert(res);
+                console.log(res);
             });
         };
 

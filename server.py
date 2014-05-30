@@ -1,8 +1,6 @@
-import json
-
 from datetime import datetime
 from flask import Flask
-from flask import render_template, request
+from flask import json, jsonify, render_template, request
 from unipath import FSPath as Path
 
 DATA_DIR = Path(__file__).absolute().ancestor(1).child('data')
@@ -16,7 +14,8 @@ def home():
 @app.route('/data', methods=['POST', 'GET'])
 def data():
     if request.method == 'GET':
-        return 'hai'
+        with open(DATA_DIR.child('data.json'), 'r') as f:
+            return jsonify(json.load(f))
     elif request.method == 'POST':
         ts = datetime.now().strftime('%Y%m%d_%H%M%S')
         for filename in ('data.json', 'data.{}.json'.format(ts)):
