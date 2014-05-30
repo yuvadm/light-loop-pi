@@ -74,9 +74,16 @@
                 $(row).find('.light-cell-btn').toggleClass('active');
             })
 
+            $('.clear-row-btn').click(function() {
+                var row = $(this).parent('.light-row');
+                $(row).find('.light-cell-btn').removeClass('active');
+            })
+
             $('#save-btn').click(function(){
                 save_data();
             });
+
+            load_data();
         });
         </script>
     </head>
@@ -108,7 +115,8 @@
                         <% _.each(_.range(cells), function(k) { %>
                             <button type="button" class="btn btn-success light-cell-btn" data-toggle="button" data-light-cell="<%= k %>">&nbsp;</button>
                         <% }); %>
-                        <button type="button" class="btn btn-warning toggle-row-btn">Toggle Row</button>
+                        <button type="button" class="btn btn-warning toggle-row-btn">Toggle</button>
+                        <button type="button" class="btn btn-warning clear-row-btn">Clear</button>
                     </div>
                 <% }); %>
             </div>
