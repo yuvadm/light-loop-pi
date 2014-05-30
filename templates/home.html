@@ -27,7 +27,6 @@
                             var $cell = $channel.find('button[data-light-cell=' + k + ']');
                             if (cell) {
                                 $cell.addClass('active');
-                                console.log(i, j, k);
                             }
                         });
                     });
@@ -96,6 +95,7 @@
             });
 
             load_data();
+            $('.light-tree[data-light-tree=0]').show();
         });
         </script>
     </head>
