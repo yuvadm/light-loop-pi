@@ -18,7 +18,6 @@
         };
 
         function save_data(data) {
-
             var data = {
                 tempo: 500,
                 trees: []
@@ -34,10 +33,9 @@
                     tree_data.push(vals);
                 });
                 data.trees.push(tree_data);
-                // console.log(tree.attr('data-light-tree'));
             });
 
-            console.log(data);
+            console.log('Saved:', data);
 
             $.ajax({
                 type: 'POST',
