@@ -14,6 +14,10 @@
         function load_data() {
             $.get('/data', function(res) {
                 console.log(res);
+                $('#speed-slider').slider({
+                    tooltip: 'always',
+                    value: res.tempo
+                });
             });
         };
 
@@ -55,10 +59,6 @@
                 var row = $(_.template($('#light-row-template').text(), {i: i, channels: CHANNELS, cells: CELLS}));
                 $('#light-container').append(row);
                 $('#tree-btns').append($('<button type="button" class="btn btn-default tree-btn" data-tree="' + i + '">Tree ' + i + '</button>'));
-            });
-
-            $('#speed-slider').slider({
-                tooltip: 'always'
             });
 
             $('.tree-btn').click(function() {
