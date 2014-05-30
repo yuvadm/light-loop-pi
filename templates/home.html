@@ -13,10 +13,24 @@
         <script>
         function load_data() {
             $.get('/data', function(res) {
-                console.log(res);
+                console.log('Loading: ', res);
                 $('#speed-slider').slider({
                     tooltip: 'always',
                     value: res.tempo
+                });
+
+                _.each(res.trees, function(tree, i) {
+                    var $tree = $('div[data-light-tree=' + i + ']');
+                    _.each(tree, function(channel, j) {
+                        var $channel = $tree.find('div[data-light-channel=' + j + ']');
+                        _.each(channel, function(cell, k) {
+                            var $cell = $channel.find('button[data-light-cell=' + k + ']');
+                            if (cell) {
+                                $cell.addClass('active');
+                                console.log(i, j, k);
+                            }
+                        });
+                    });
                 });
             });
         };
@@ -108,7 +122,7 @@
             <div class="light-tree" data-light-tree="<%= i %>">
                 <h3>Tree <%= i %></h3>
                 <% _.each(_.range(channels), function(j) { %>
-                    <div class="light-row" data-light-row="<%= j %>">
+                    <div class="light-row" data-light-channel="<%= j %>">
                         <span>Channel <%= j %></span>
                         <% _.each(_.range(cells), function(k) { %>
                             <button type="button" class="btn btn-success light-cell-btn" data-toggle="button" data-light-cell="<%= k %>">&nbsp;</button>
