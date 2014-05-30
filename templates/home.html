@@ -60,6 +60,11 @@
                 $('.light-tree[data-light-tree=' + tree +']').show();
             });
 
+            $('.toggle-row-btn').click(function() {
+                var row = $(this).parent('.light-row');
+                $(row).find('.light-cell-btn').toggleClass('active');
+            })
+
             $('#save-btn').click(function(){
                 save_data();
             });
@@ -94,6 +99,7 @@
                         <% _.each(_.range(cells), function(k) { %>
                             <button type="button" class="btn btn-success light-cell-btn" data-toggle="button" data-light-cell="<%= k %>">&nbsp;</button>
                         <% }); %>
+                        <button type="button" class="btn btn-warning toggle-row-btn">Toggle Row</button>
                     </div>
                 <% }); %>
             </div>
