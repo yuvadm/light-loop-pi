@@ -11,6 +11,18 @@ app = Flask(__name__)
 def home():
     return render_template('home.html')
 
+def save_json(data, filename):
+    with open(DATA_DIR.child(filename), 'w') as f:
+        json.dump(data, f, indent=2)
+
+def save_raw(data, filename):
+    with open(DATA_DIR.child(filename), 'w') as f:
+        f.write('{}\n\n'.format(data['tempo']))
+        for tree in data['trees']:
+            for row in tree:
+                f.write(''.join(map(str, row)) + '\n')
+            f.write('\n')
+
 @app.route('/data', methods=['POST', 'GET'])
 def data():
     if request.method == 'GET':
@@ -18,9 +30,9 @@ def data():
             return jsonify(json.load(f))
     elif request.method == 'POST':
         ts = datetime.now().strftime('%Y%m%d_%H%M%S')
-        for filename in ('data.json', 'data.{}.json'.format(ts)):
-            with open(DATA_DIR.child(filename), 'w') as f:
-                json.dump(request.json, f, indent=2)
+        save_json(request.json, 'data.json')
+        save_json(request.json, 'data.{}.json'.format(ts))
+        save_raw(request.json, 'data.txt')
         return 'ok'
 
 if __name__ == '__main__':
