@@ -19,15 +19,22 @@
         }
 
         $(document).ready(function() {
+            $.get('/data', function(res) {
+                var data = res.data.split('\n===\n');
+                $('#sequences-area').val(data[0]);
+                $('#composition-area').val(data[1]);
+            })
+
             $('#save-btn').click(function() {
                 $.ajax({
                     type: 'POST',
                     contentType: 'application/json',
                     data: JSON.stringify({
-                        "data": $('#sequences-area').val() + '\n\n' + $('#composition-area').val()
+                        "data": $('#sequences-area').val() + '\n===\n' + $('#composition-area').val()
                     }),
                     dataType: 'json',
                     url: '/data',
+                    success: function() { alert('Saved'); }
                 });
             });
         });
