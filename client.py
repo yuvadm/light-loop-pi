@@ -7,7 +7,11 @@ class LightLoopClient(object):
     def __init__(self):
         self.sequences = {}
         self.compostion = []
+        self.tempo = 300
         self.init_data()
+
+    def __str__(self):
+        return '{}\n{}\n{}'.format(self.sequences, self.composition, self.tempo)
 
     def init_data(self):
         with open(DATA_DIR.child('data.txt'), 'r') as f:
@@ -16,17 +20,18 @@ class LightLoopClient(object):
 
             for sequence in sequence_data.split('#')[1:]:
                 lines = sequence.split('\n')
-                name, sequence_data = lines[0].strip(), filter(lambda x: x != '', lines[1:])
+                name, sequence_data = lines[0].strip(), [map(int, list(x)) for x in filter(lambda x: x != '', lines[1:])]
                 self.sequences[name] = sequence_data
 
-            self.composition = composition_data.split('\n')[1:]
+            self.composition = [c.split(',') for c in composition_data.split('\n')[1:]]
 
-    def print_data(self):
-        print self.sequences
-        print self.composition
+    def process_single_loop(self):
+        for c in self.composition:
+            pass
+
 
     def loop(self):
-        self.print_data()
+        print self
             
 
 if __name__ == '__main__':
