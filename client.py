@@ -6,7 +6,7 @@ DATA_DIR = Path(__file__).absolute().ancestor(1).child('data')
 class LightLoopClient(object):
     def __init__(self):
         self.sequences = {}
-        self.compostion = []
+        self.composition = []
         self.tempo = 300
         self.init_data()
 
@@ -26,14 +26,16 @@ class LightLoopClient(object):
             self.sequences[name] = sequence_data
 
     def init_composition(self, composition_data):
-        self.composition = [c.split(',') for c in composition_data.split('\n')[1:]]    
+        composition_data = filter(lambda x: x != '', composition_data.split('\n'))
+        self.tempo = composition_data[0].split('_')[1]
+        self.composition = [c.split(',') for c in composition_data[1:]]
 
     def process_single_loop(self):
-        for c in self.composition:
-            pass
+        print zip(*self.composition)
 
     def loop(self):
         print self
+        self.process_single_loop()
             
 
 if __name__ == '__main__':
