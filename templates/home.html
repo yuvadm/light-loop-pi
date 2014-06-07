@@ -9,129 +9,71 @@
         <script src="/static/js/jquery-2.1.1.min.js"></script>
         <script src="/static/js/underscore-min.js"></script>
         <script src="/static/js/bootstrap.min.js"></script>
-        <script src="/static/js/bootstrap-slider.min.js"></script>
         <script>
         function load_data() {
-            $.get('/data', function(res) {
-                console.log('Loading: ', res);
-                $('#speed-slider').slider({
-                    tooltip: 'always',
-                    value: res.tempo
-                });
 
-                _.each(res.trees, function(tree, i) {
-                    var $tree = $('div[data-light-tree=' + i + ']');
-                    _.each(tree, function(channel, j) {
-                        var $channel = $tree.find('div[data-light-channel=' + j + ']');
-                        _.each(channel, function(cell, k) {
-                            var $cell = $channel.find('button[data-light-cell=' + k + ']');
-                            if (cell) {
-                                $cell.addClass('active');
-                            }
-                        });
-                    });
-                });
-            });
         };
 
         function save_data(data) {
-            var data = {
-                tempo: +$('#speed-slider').val(),
-                trees: []
-            };
 
-            $('.light-tree').each(function(_idx, tree) {
-                tree = $(tree);
-                var tree_data = []
-                tree.find('.light-row').each(function(_idx, row) {
-                    var vals = $(row).find('.light-cell-btn').toArray().map(function(x) {
-                        return x.className.contains('active') ? 1 : 0;
-                    });
-                    tree_data.push(vals);
-                });
-                data.trees.push(tree_data);
-            });
-
-            console.log('Saved:', data);
-
-            $.ajax({
-                type: 'POST',
-                contentType: 'application/json',
-                data: JSON.stringify(data),
-                dataType: 'json',
-                url: '/data',
-            });
         }
 
         $(document).ready(function() {
-            var TREES = 8;
-            var CHANNELS = 8;
-            var CELLS = 24;
-
-            _.each(_.range(CHANNELS), function(i) {
-                var row = $(_.template($('#light-row-template').text(), {i: i, channels: CHANNELS, cells: CELLS}));
-                $('#light-container').append(row);
-                $('#tree-btns').append($('<button type="button" class="btn btn-default tree-btn" data-tree="' + i + '">Tree ' + i + '</button>'));
+            $('#save-btn').click(function() {
+                $.ajax({
+                    type: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify({
+                        "data": $('#sequences-area').val() + '\n\n' + $('#composition-area').val()
+                    }),
+                    dataType: 'json',
+                    url: '/data',
+                });
             });
-
-            $('.tree-btn').click(function() {
-                var tree = $(this).attr('data-tree');
-                $('.light-tree').hide();
-                $('.light-tree[data-light-tree=' + tree +']').show();
-            });
-
-            $('.toggle-row-btn').click(function() {
-                var row = $(this).parent('.light-row');
-                $(row).find('.light-cell-btn').toggleClass('active');
-            })
-
-            $('.clear-row-btn').click(function() {
-                var row = $(this).parent('.light-row');
-                $(row).find('.light-cell-btn').removeClass('active');
-            })
-
-            $('#save-btn').click(function(){
-                save_data();
-            });
-
-            load_data();
-            $('.light-tree[data-light-tree=0]').show();
         });
         </script>
     </head>
     <body>
         <div class="container">
             <h1>Light Loop Pi</h1>
-
-            <div class="speed-slider">
-                <label>Loop speed:</label>
-                <input id="speed-slider" data-slider-id='ex1Slider' type="text" data-slider-min="500" data-slider-max="5000" data-slider-step="100"/>
-            </div>
-
             <div class="btn-toolbar" role="toolbar">
-                <div id="tree-btns" class="btn-group"></div>
                 <div class="btn-group">
                     <button id="save-btn" type="button" class="btn btn-primary">Save</button>
                 </div>
             </div>
+                
+            <div class="row">
+                <div class="col-md-6">
+                    <h2>Sequences</h2>
+                    <textarea id="sequences-area" cols="60" rows="20"></textarea>
+                    <h4>Sequence Format</h4>
+                    <pre>
+# sequence_name
+000000000000111111111111
+010101010101010101010101
+111111111111111111111111
+111111111111000000000000
+000000000000111111111111
+010101010101010101010101
+111111111111111111111111
+111111111111000000000000
+                    </pre>
+                    <p>Rules: no spaces in name, same number of rows, all rows same length</p>
+                </div>
+                <div class="col-md-6">
+                    <h2>Composition</h2>
+                    <textarea id="composition-area" cols="80" rows="20"></textarea>
+                    <h4>Composition Format</h4>
+                    <pre>
+# composition
+blinking,blinking,off,off
+on,on,blinking,on
+on,off,fade,fade
 
-            <div id="light-container"></div>
-        </div>
-
-        <script type="text/template" class="template" id="light-row-template">
-            <div class="light-tree" data-light-tree="<%= i %>">
-                <h3>Tree <%= i %></h3>
-                <% _.each(_.range(channels), function(j) { %>
-                    <div class="light-row" data-light-channel="<%= j %>">
-                        <span>Channel <%= j %></span>
-                        <% _.each(_.range(cells), function(k) { %>
-                            <button type="button" class="btn btn-success light-cell-btn" data-toggle="button" data-light-cell="<%= k %>">&nbsp;</button>
-                        <% }); %>
-                        <button type="button" class="btn btn-warning toggle-row-btn">Toggle</button>
-                        <button type="button" class="btn btn-warning clear-row-btn">Clear</button>
-                    </div>
-                <% }); %>
+                    </pre>
+                    <p>Rules: all rows same length of sequences</p>
+                </div>
             </div>
-        </script>
+        </div>
     </body>
 </html>
