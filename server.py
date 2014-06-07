@@ -11,6 +11,26 @@ app = Flask(__name__)
 def home():
     return render_template('home.html')
 
+@app.route('/sequence', methods=['GET'])
+@app.route('/sequence/<name>', methods=['POST', 'GET'])
+def sequence(name=None):
+    sequences_dir = DATA_DIR.child('sequences')
+
+    if name and request.method == 'GET':
+        with open(sequences_dir.child('{}.json'.format(name)), 'r') as f:
+            return jsonify(json.load(f))
+
+    sequences = [{
+        'name': sequence.name.split('.json')[0],
+        'pattern': json.load(open(sequence, 'r'))
+    } for sequence in sequences_dir.walk(pattern='*.json')]
+
+    if request.method == 'POST':
+        with open(sequences_dir.child('{}.json'.format(name)), 'w') as f:
+            json.dump(data, f, indent=2)
+
+    return render_template('sequence.html', sequences=sequences)
+
 def save_json(data, filename):
     with open(DATA_DIR.child(filename), 'w') as f:
         json.dump(data, f, indent=2)
