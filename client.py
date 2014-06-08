@@ -40,7 +40,8 @@ class LightLoopClient(object):
         raw_data = ''
         for frame in zip(*self.composition):
             print frame
-            sequences = zip(*[zip(*self.sequences[seq]) for seq in frame])
+            sequences = [zip(*self.sequences[seq]) for seq in frame]
+            sequences = zip(*sequences)
             raw_data += ''.join([''.join([''.join(y) for y in x]) for x in sequences])
         print raw_data
 
