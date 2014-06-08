@@ -31,12 +31,12 @@ class LightLoopClient(object):
         self.tempo = composition_data[0].split('_')[1]
         self.composition = [c.split(',') for c in composition_data[1:]]
 
-    def gen_packet(tree, channel, mode):
+    def gen_packet(self, tree, channel, mode):
         if tree > 7 or channel > 7 or mode > 1:
             raise Exception('Bad values')
-        return (tree << 5) | (channel << 2) | mode
+        return chr((tree << 5) | (channel << 2) | mode)
 
-    def process_single_loop(self):
+    def prepare_data(self):
         data = []
         for frame in zip(*self.composition):
             sequences = [zip(*self.sequences[seq]) for seq in frame]
@@ -44,15 +44,23 @@ class LightLoopClient(object):
             # print ''.join([''.join([''.join(y) for y in x]) for x in sequences])
             data.append(sequences)
 
+        self.data_packets = []
         for sequence in data:
             for frame in sequence:
+                frame_packets = []
                 for tree, tree_frame in enumerate(frame):
                     for channel, mode in enumerate(tree_frame):
-                        print 'tree {} channel {} mode {}'.format(tree, channel, mode)
-                print 'sleep'
+                        tree, channel, mode = map(int, [tree, channel, mode])
+                        # print 'tree {} channel {} mode {}'.format(tree, channel, mode)
+                        packet = self.gen_packet(tree, channel, mode)
+                        frame_packets.append(packet)
+                self.data_packets.append(frame_packets)
+                # print 'sleep'
+
 
     def loop(self):
-        self.process_single_loop()
+        self.prepare_data()
+        print self.data_packets
             
 
 if __name__ == '__main__':
