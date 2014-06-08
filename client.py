@@ -37,16 +37,21 @@ class LightLoopClient(object):
         return (tree << 5) | (channel << 2) | mode
 
     def process_single_loop(self):
-        raw_data = ''
+        data = []
         for frame in zip(*self.composition):
-            print frame
             sequences = [zip(*self.sequences[seq]) for seq in frame]
             sequences = zip(*sequences)
-            raw_data += ''.join([''.join([''.join(y) for y in x]) for x in sequences])
-        print raw_data
+            # print ''.join([''.join([''.join(y) for y in x]) for x in sequences])
+            data.append(sequences)
+
+        for sequence in data:
+            for frame in sequence:
+                for tree, tree_frame in enumerate(frame):
+                    for channel, mode in enumerate(tree_frame):
+                        print 'tree {} channel {} mode {}'.format(tree, channel, mode)
+                print 'sleep'
 
     def loop(self):
-        print self
         self.process_single_loop()
             
 
