@@ -1,3 +1,5 @@
+import serial
+
 from itertools import cycle
 from pprint import pprint
 from time import sleep
@@ -19,7 +21,7 @@ class LightLoopClient(object):
         return '{}\n{}\n{}'.format(self.sequences, self.composition, self.tempo)
 
     def init_serial(self):
-        self.serial = open(DATA_DIR.child('serial.out'), 'a')
+        self.serial = serial.Serial('/dev/ttyUSB0', 115200)
 
     def init_data(self):
         with open(DATA_DIR.child('data.txt'), 'r') as f:
@@ -66,7 +68,6 @@ class LightLoopClient(object):
 
     def write(self, packets):
         self.serial.write(packets)
-        self.serial.flush()
 
     def loop(self):
         for frame in cycle(self.data_packets):
